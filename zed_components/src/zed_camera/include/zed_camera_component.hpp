@@ -60,8 +60,11 @@
 #include <zed_interfaces/srv/set_pose.hpp>
 #include <zed_interfaces/srv/start_svo_rec.hpp>
 
+#include "stream_defines.hpp"
+
 #define TIMEZERO_ROS rclcpp::Time(0,0,RCL_ROS_TIME)
-#define TIMEZERO_SYS rclcpp::Time(0,0,RCL_SYSTEM_TIME)
+// #define TIMEZERO_SYS rclcpp::Time(0,0,RCL_SYSTEM_TIME)
+#define TIMEZERO_SYS tf2::TimePointZero
 
 namespace stereolabs {
 

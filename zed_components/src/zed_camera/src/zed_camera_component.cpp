@@ -2440,7 +2440,7 @@ bool ZedCamera::getCamera2BaseTransform() {
     try {
         // Save the transformation
         geometry_msgs::msg::TransformStamped c2b =
-                mTfBuffer->lookupTransform(mCameraFrameId, mBaseFrameId, TIMEZERO_SYS, rclcpp::Duration(0.1));
+                mTfBuffer->lookupTransform(mCameraFrameId, mBaseFrameId, TIMEZERO_SYS, tf2::Duration(1));
 
         // Get the TF2 transformation
         //tf2::fromMsg(c2b.transform, mCamera2BaseTransf);
@@ -2494,7 +2494,7 @@ bool ZedCamera::getSens2CameraTransform() {
     try {
         // Save the transformation
         geometry_msgs::msg::TransformStamped s2c =
-                mTfBuffer->lookupTransform(mDepthFrameId, mCameraFrameId, TIMEZERO_SYS, rclcpp::Duration(0.1));
+                mTfBuffer->lookupTransform(mDepthFrameId, mCameraFrameId, TIMEZERO_SYS, tf2::Duration(1));
 
         // Get the TF2 transformation
         //tf2::fromMsg(s2c.transform, mSensor2CameraTransf);
@@ -2548,7 +2548,7 @@ bool ZedCamera::getSens2BaseTransform() {
     try {
         // Save the transformation
         geometry_msgs::msg::TransformStamped s2b =
-                mTfBuffer->lookupTransform(mDepthFrameId, mBaseFrameId, TIMEZERO_SYS, rclcpp::Duration(0.1));
+                mTfBuffer->lookupTransform(mDepthFrameId, mBaseFrameId, TIMEZERO_SYS, tf2::Duration(1));
 
         // Get the TF2 transformation
         //tf2::fromMsg(s2b.transform, mSensor2BaseTransf);
