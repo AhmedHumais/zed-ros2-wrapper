@@ -72,7 +72,9 @@
 #include <zed_interfaces/srv/set_roi.hpp>
 
 #define TIMEZERO_ROS rclcpp::Time(0, 0, RCL_ROS_TIME)
-#define TIMEZERO_SYS rclcpp::Time(0, 0, RCL_SYSTEM_TIME)
+// #define TIMEZERO_SYS rclcpp::Time(0, 0, RCL_SYSTEM_TIME)
+
+#define TIMEZERO_SYS tf2::TimePointZero
 
 namespace stereolabs
 {
@@ -371,8 +373,10 @@ private:
   // <---- Parameter variables
 
   // ----> Dynamic params
-  OnSetParametersCallbackHandle::SharedPtr mParamChangeCallbackHandle;
-
+//  OnSetParametersCallbackHandle::SharedPtr mParamChangeCallbackHandle;
+  
+  OnParametersSetCallbackType mParamChangeCallbackHandle; 	
+  
   double mPubFrameRate = 15;
   double mImgDownsampleFactor = 1.0;
   int mCamBrightness = 4;

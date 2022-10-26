@@ -38,7 +38,9 @@
 #elif defined FOUND_FOXY
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #else
-#error Unsupported ROS2 distro
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+
+// #error Unsupported ROS2 distro
 #endif
 
 #include <type_traits>
@@ -47,6 +49,8 @@
 
 #include <sl/Camera.hpp>
 #include "sl_tools.h"
+
+#include "stream_defines.hpp"
 
 using namespace std::chrono_literals;
 using namespace std::placeholders;
@@ -106,7 +110,8 @@ ZedCamera::ZedCamera(const rclcpp::NodeOptions& options)
   }
 
   // Dynamic parameters callback
-  mParamChangeCallbackHandle = add_on_set_parameters_callback(std::bind(&ZedCamera::callback_paramChange, this, _1));
+  // mParamChangeCallbackHandle = add_on_set_parameters_callback(std::bind(&ZedCamera::callback_paramChange, this, _1));
+  mParamChangeCallbackHandle = set_on_parameters_set_callback (std::bind(&ZedCamera::callback_paramChange, this, _1));
 }
 
 ZedCamera::~ZedCamera()
@@ -3238,7 +3243,7 @@ bool ZedCamera::getCamera2BaseTransform()
   {
     // Save the transformation
     geometry_msgs::msg::TransformStamped c2b =
-        mTfBuffer->lookupTransform(mCameraFrameId, mBaseFrameId, TIMEZERO_SYS, rclcpp::Duration(1, 0));
+        mTfBuffer->lookupTransform(mCameraFrameId, mBaseFrameId, TIMEZERO_SYS, tf2::Duration(1));
 
     // Get the TF2 transformation
     // tf2::fromMsg(c2b.transform, mCamera2BaseTransf);
@@ -3298,7 +3303,7 @@ bool ZedCamera::getSens2CameraTransform()
   {
     // Save the transformation
     geometry_msgs::msg::TransformStamped s2c =
-        mTfBuffer->lookupTransform(mDepthFrameId, mCameraFrameId, TIMEZERO_SYS, rclcpp::Duration(1, 0));
+        mTfBuffer->lookupTransform(mDepthFrameId, mCameraFrameId, TIMEZERO_SYS, tf2::Duration(1));
 
     // Get the TF2 transformation
     // tf2::fromMsg(s2c.transform, mSensor2CameraTransf);
@@ -3358,7 +3363,7 @@ bool ZedCamera::getSens2BaseTransform()
   {
     // Save the transformation
     geometry_msgs::msg::TransformStamped s2b =
-        mTfBuffer->lookupTransform(mDepthFrameId, mBaseFrameId, TIMEZERO_SYS, rclcpp::Duration(1, 0));
+        mTfBuffer->lookupTransform(mDepthFrameId, mBaseFrameId, TIMEZERO_SYS, tf2::Duration(1));
 
     // Get the TF2 transformation
     // tf2::fromMsg(s2b.transform, mSensor2BaseTransf);
@@ -6540,7 +6545,7 @@ void ZedCamera::callback_clickedPoint(const geometry_msgs::msg::PointStamped::Sh
   {
     // Save the transformation
     geometry_msgs::msg::TransformStamped m2o =
-        mTfBuffer->lookupTransform(mLeftCamOptFrameId, msg->header.frame_id, TIMEZERO_SYS, rclcpp::Duration(1, 0));
+        mTfBuffer->lookupTransform(mLeftCamOptFrameId, msg->header.frame_id, TIMEZERO_SYS, tf2::Duration(1));
 
     RCLCPP_INFO(get_logger(), "'%s' -> '%s': {%.3f,%.3f,%.3f} {%.3f,%.3f,%.3f,%.3f}", msg->header.frame_id.c_str(),
                 mLeftCamOptFrameId.c_str(), m2o.transform.translation.x, m2o.transform.translation.y,

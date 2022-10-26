@@ -50,21 +50,23 @@ def generate_launch_description():
         'common.yaml'
     )
 
-    if(camera_model != 'zed'):
-        config_camera_path = os.path.join(
-            get_package_share_directory('zed_wrapper'),
-            'config',
-            camera_model + '.yaml'
-        )
-    else:
-        config_camera_path = ''
+    # if(camera_model != 'zed'):
+    config_camera_path = os.path.join(
+        get_package_share_directory('zed_wrapper'),
+        'config',
+        camera_model + '.yaml'
+    )
+    # else:
+    #     config_camera_path = ''
 
     # URDF/xacro file to be loaded by the Robot State Publisher node
     xacro_path = os.path.join(
         get_package_share_directory('zed_wrapper'),
         'urdf', 'zed_descr.urdf.xacro'
     )
-
+    
+    print(config_camera_path)
+    print(config_common_path)
     # ZED Wrapper node
     zed_wrapper_launch = IncludeLaunchDescription(
         launch_description_source=PythonLaunchDescriptionSource([

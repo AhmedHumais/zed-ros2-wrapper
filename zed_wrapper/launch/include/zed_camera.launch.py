@@ -7,7 +7,7 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
-from launch.substitutions import LaunchConfiguration, Command
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 
@@ -126,29 +126,29 @@ def generate_launch_description():
         description='Yaw orientation of the camera with respect to the base frame.')
 
     # Robot State Publisher node
-    rsp_node = Node(
-        condition=IfCondition(publish_urdf),
-        package='robot_state_publisher',
-        namespace=camera_name,
-        executable='robot_state_publisher',
-        name='zed_state_publisher',
-        output='screen',
-        parameters=[{
-            'robot_description': Command(
-                [
-                    'xacro', ' ', xacro_path, ' ',
-                    'camera_name:=', camera_name, ' ',
-                    'camera_model:=', camera_model, ' ',
-                    'base_frame:=', base_frame, ' ',
-                    'cam_pos_x:=', cam_pos_x, ' ',
-                    'cam_pos_y:=', cam_pos_y, ' ',
-                    'cam_pos_z:=', cam_pos_z, ' ',
-                    'cam_roll:=', cam_roll, ' ',
-                    'cam_pitch:=', cam_pitch, ' ',
-                    'cam_yaw:=', cam_yaw
-                ])
-        }]
-    )
+    # rsp_node = Node(
+    #     condition=IfCondition(publish_urdf),
+    #     package='robot_state_publisher',
+    #     node_namespace=camera_name,
+    #     node_executable='robot_state_publisher',
+    #     node_name='zed_state_publisher',
+    #     output='screen',
+    #     # parameters=[{
+    #     #     'robot_description': Command(
+    #     #         [
+    #     #             'xacro', ' ', xacro_path, ' ',
+    #     #             'camera_name:=', camera_name, ' ',
+    #     #             'camera_model:=', camera_model, ' ',
+    #     #             'base_frame:=', base_frame, ' ',
+    #     #             'cam_pos_x:=', cam_pos_x, ' ',
+    #     #             'cam_pos_y:=', cam_pos_y, ' ',
+    #     #             'cam_pos_z:=', cam_pos_z, ' ',
+    #     #             'cam_roll:=', cam_roll, ' ',
+    #     #             'cam_pitch:=', cam_pitch, ' ',
+    #     #             'cam_yaw:=', cam_yaw
+    #     #         ])
+    #     # }]
+    # )
 
     # Set LOG format
     os.environ['RCUTILS_CONSOLE_OUTPUT_FORMAT'] = '{time} [{name}] [{severity}] {message}'
@@ -156,9 +156,9 @@ def generate_launch_description():
     # ZED Wrapper node
     zed_wrapper_node = Node(
         package='zed_wrapper',
-        namespace=camera_name,
-        executable='zed_wrapper',
-        name=node_name,
+        node_namespace=camera_name,
+        node_executable='zed_wrapper',
+        node_name=node_name,
         output='screen',
         #prefix=['xterm -e valgrind --tools=callgrind'],
         #prefix=['xterm -e gdb -ex run --args'],
@@ -195,7 +195,7 @@ def generate_launch_description():
     ld.add_action(declare_pitch_cmd)
     ld.add_action(declare_yaw_cmd)
 
-    ld.add_action(rsp_node)
+    # ld.add_action(rsp_node)
     ld.add_action(zed_wrapper_node)
 
     return ld
